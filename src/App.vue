@@ -4,7 +4,7 @@
       <div v-if="cityName.length" class="toolbox">
         <div class="sticky-top bg-white shadow-sm p-2">
           <div class="form-group d-flex">
-            <label for="cityName" class="mr-2 col-form-label text-right">縣市</label>
+            <label for="cityName" class="mr-2 col-form-label text-right">City</label>
             <div class="flex-fill">
               <select id="cityName" class="form-control"
               v-model="select.city" @change="select.area = ''">
@@ -16,7 +16,7 @@
             </div>
           </div>
           <div class="form-group d-flex">
-            <label for="area" class="mr-2 col-form-label text-right">地區</label>
+            <label for="area" class="mr-2 col-form-label text-right">District</label>
             <div class="flex-fill">
               <select id="area" class="form-control" v-if="select.city.length"
                 v-model="select.area" @change="updateSelect">
@@ -29,7 +29,7 @@
               </select>
             </div>
           </div>
-          <p class="mb-0 small text-muted text-right">請先選擇區域查看（綠色表示還有口罩）</p>
+          <p class="mb-0 small text-muted text-right">Select by district(green means available)</p>
         </div>
 
         <ul class="list-group">
@@ -41,9 +41,9 @@
               @click="penTo(item)">
               <h3>{{ item.properties.name }}</h3>
               <p class="mb-0">
-                成人口罩：{{ item.properties.mask_adult}} | 兒童口罩：{{ item.properties.mask_child}}
+                Adult: {{ item.properties.mask_adult}}  |  Child: {{ item.properties.mask_child}}
               </p>
-              <p class="mb-0">地址：<a :href="`https://www.google.com.tw/maps/place/${item.properties.address}`"
+              <p class="mb-0">Address: <a :href="`https://www.google.com.tw/maps/place/${item.properties.address}`"
                 target="_blank" title="Google Map">
                 {{ item.properties.address }}</a>
               </p>
@@ -88,10 +88,10 @@ const osm = {
     L.marker([y, x], {
       icon,
     }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
-    口罩剩餘：<strong>成人 - ${item.mask_adult ? `${item.mask_adult} 個` : '未取得資料'}/ 兒童 - ${item.mask_child ? `${item.mask_child} 個` : '未取得資料'}</strong><br>
-    地址: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
-    電話: ${item.phone}<br>
-    <small>最後更新時間: ${item.updated}</small>`);
+    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Tele: ${item.phone}<br>
+    <small>Last updated: ${item.updated}</small>`);
   },
   removeMapMarker() {
     osmMap.eachLayer((layer) => {
@@ -105,11 +105,13 @@ const osm = {
     osmMap.panTo(new L.LatLng(y, x));
     L.marker([y, x], {
       icon,
-    }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
-    口罩剩餘：<strong>成人 - ${item.mask_adult ? `${item.mask_adult} 個` : '未取得資料'}/ 兒童 - ${item.mask_child ? `${item.mask_child} 個` : '未取得資料'}</strong><br>
-    地址: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
-    電話: ${item.phone}<br>
-    <small>最後更新時間: ${item.updated}</small>`).openPopup();
+    }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong><br>
+    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Tele: ${item.phone}<br>
+    Note: ${item.note}
+    <br>
+    <small>Last updated: ${item.updated}</small>`).openPopup();
   },
 };
 
