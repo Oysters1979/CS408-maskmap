@@ -29,9 +29,39 @@
               </select>
             </div>
           </div>
-          <p class="mb-0 small text-muted text-right">Select by district(green means available)</p>
+          <div class="form-group d-flex">
+            <div class="ml-auto">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox"
+                id="checkAdult" value="adultTrue" checked>
+                <label class="form-check-label" for="checkAdult">Adult</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox"
+                id="checkChild" value="childTrue" checked>
+                <label class="form-check-label" for="checkChild">Child</label>
+              </div>
+            </div>
+            <div class="mr-auto">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                id="check3km" value="3kmTrue" checked>
+                <label class="form-check-label" for="check3km">3km</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                id="check5km" value="5kmTrue">
+                <label class="form-check-label" for="check5km">5km</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                id="checkAll" value="allTrue">
+                <label class="form-check-label" for="checkAll">all</label>
+              </div>
+            </div>
+          </div>
+          <p class="mb-0 small text-muted text-right">Search by district(green means available)</p>
         </div>
-
         <ul class="list-group">
           <template v-for="(item, key) in data">
             <a class="list-group-item text-left" :key="key"
