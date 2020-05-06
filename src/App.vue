@@ -44,18 +44,18 @@
             </div>
             <div class="mr-auto">
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                id="check3km" value="3kmTrue" checked>
+                <input class="form-check-input" type="radio" v-model="inlineRadioOptions"
+                id="check3km" value="3" @change="updateMarker">
                 <label class="form-check-label" for="check3km">3km</label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                id="check5km" value="5kmTrue">
+                <input class="form-check-input" type="radio" v-model="inlineRadioOptions"
+                id="check5km" value="5" @change="updateMarker">
                 <label class="form-check-label" for="check5km">5km</label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                id="checkAll" value="allTrue">
+                <input class="form-check-input" type="radio" v-model="inlineRadioOptions"
+                id="checkAll" value="1000" checked @change="updateMarker">
                 <label class="form-check-label" for="checkAll">all</label>
               </div>
             </div>
@@ -66,12 +66,65 @@
           <template v-for="(item, key) in data">
             <a class="list-group-item text-left" :key="key"
               v-if="item.properties.county === select.city
-                && item.properties.town === select.area"
+                && item.properties.town === select.area
+                && inlineRadioOptions === '1000'"
               :class="{ 'highlight': item.properties.mask_adult || item.properties.mask_child}"
               @click="penTo(item)">
               <h3>{{ item.properties.name }}</h3>
               <p class="mb-0">
                 Adult: {{ item.properties.mask_adult}}  |  Child: {{ item.properties.mask_child}}
+              </p>
+              <p class="mb-0">
+                 Distance：{{
+                  getDistance(item.geometry.coordinates[0],
+                  item.geometry.coordinates[1], 121.55, 25.03)}}
+                  Km
+              </p>
+              <p class="mb-0">Address: <a :href="`https://www.google.com.tw/maps/place/${item.properties.address}`"
+                target="_blank" title="Google Map">
+                {{ item.properties.address }}</a>
+              </p>
+            </a>
+            <a class="list-group-item text-left" :key="key"
+              v-else-if="item.properties.county === select.city
+                && item.properties.town === select.area
+                && inlineRadioOptions === '3'
+                && getDistance(item.geometry.coordinates[0],
+                item.geometry.coordinates[1], 121.55, 25.03) < 3"
+              :class="{ 'highlight': item.properties.mask_adult || item.properties.mask_child}"
+              @click="penTo(item)">
+              <h3>{{ item.properties.name }}</h3>
+              <p class="mb-0">
+                Adult: {{ item.properties.mask_adult}}  |  Child: {{ item.properties.mask_child}}
+              </p>
+              <p class="mb-0">
+                 Distance：{{
+                  getDistance(item.geometry.coordinates[0],
+                  item.geometry.coordinates[1], 121.55, 25.03)}}
+                  Km
+              </p>
+              <p class="mb-0">Address: <a :href="`https://www.google.com.tw/maps/place/${item.properties.address}`"
+                target="_blank" title="Google Map">
+                {{ item.properties.address }}</a>
+              </p>
+            </a>
+            <a class="list-group-item text-left" :key="key"
+              v-else-if="item.properties.county === select.city
+                && item.properties.town === select.area
+                && inlineRadioOptions === '5'
+                && getDistance(item.geometry.coordinates[0],
+                item.geometry.coordinates[1], 121.55, 25.03) < 5"
+              :class="{ 'highlight': item.properties.mask_adult || item.properties.mask_child}"
+              @click="penTo(item)">
+              <h3>{{ item.properties.name }}</h3>
+              <p class="mb-0">
+                Adult: {{ item.properties.mask_adult}}  |  Child: {{ item.properties.mask_child}}
+              </p>
+              <p class="mb-0">
+                 Distance：{{
+                  getDistance(item.geometry.coordinates[0],
+                  item.geometry.coordinates[1], 121.55, 25.03)}}
+                  Km
               </p>
               <p class="mb-0">Address: <a :href="`https://www.google.com.tw/maps/place/${item.properties.address}`"
                 target="_blank" title="Google Map">
@@ -113,6 +166,20 @@ const icons = {
 };
 
 const osm = {
+  rad(d) {
+    return d * (Math.PI / 180.0);
+  },
+  getDistance(lat1, lng1, lat2, lng2) {
+    const radLat1 = this.rad(lat1);
+    const radLat2 = this.rad(lat2);
+    const a = radLat1 - radLat2;
+    const b = this.rad(lng1) - this.rad(lng2);
+    let s = 2 * Math.asin(Math.sqrt(Math.sin(a / 2) * Math.sin(a / 2)
+    + Math.cos(radLat1) * Math.cos(radLat2) * Math.sin(b / 2) * Math.sin(b / 2)));
+    s *= 6378.137; //  地球半径
+    s = Math.round(s * 10000) / 10000; // 输出为公里
+    return s;
+  },
   addMapMarker(x, y, item) {
     const icon = item.mask_adult || item.mask_child ? icons.green : icons.grey;
     L.marker([y, x], {
@@ -121,6 +188,7 @@ const osm = {
     Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
     Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
     Tele: ${item.phone}<br>
+    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
     <small>Last updated: ${item.updated}</small>`);
   },
   removeMapMarker() {
@@ -139,6 +207,7 @@ const osm = {
     Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
     Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
     Tele: ${item.phone}<br>
+    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
     Note: ${item.note}
     <br>
     <small>Last updated: ${item.updated}</small>`).openPopup();
@@ -155,14 +224,34 @@ export default {
       city: '臺北市',
       area: '大安區',
     },
+    inlineRadioOptions: '1000',
   }),
   methods: {
+    rad(d) {
+      return d * (Math.PI / 180.0);
+    },
+    getDistance(lat1, lng1, lat2, lng2) {
+      const radLat1 = this.rad(lat1);
+      const radLat2 = this.rad(lat2);
+      const a = radLat1 - radLat2;
+      const b = this.rad(lng1) - this.rad(lng2);
+      let s = 2 * Math.asin(Math.sqrt(Math.sin(a / 2) * Math.sin(a / 2)
+      + Math.cos(radLat1) * Math.cos(radLat2) * Math.sin(b / 2) * Math.sin(b / 2)));
+      s *= 6378.137; //  地球半径
+      s = Math.round(s * 10000) / 10000; // 输出为公里
+      return s;
+    },
     updateMarker() {
+      this.removeMarker();
       const pharmacies = this.data.filter((pharmacy) => {
         if (!this.select.area) {
-          return pharmacy.properties.county === this.select.city;
+          return pharmacy.properties.county === this.select.city
+          && this.getDistance(121.55, 25.03, pharmacy.geometry.coordinates[0],
+            pharmacy.geometry.coordinates[1]) < this.inlineRadioOptions;
         }
-        return pharmacy.properties.town === this.select.area;
+        return pharmacy.properties.town === this.select.area
+          && this.getDistance(121.55, 25.03, pharmacy.geometry.coordinates[0],
+            pharmacy.geometry.coordinates[1]) < this.inlineRadioOptions;
       });
       pharmacies.forEach((pharmacy) => {
         const { properties, geometry } = pharmacy;
@@ -172,7 +261,6 @@ export default {
           properties,
         );
       });
-      this.penTo(pharmacies[0]);
     },
     removeMarker() {
       osm.removeMapMarker();
