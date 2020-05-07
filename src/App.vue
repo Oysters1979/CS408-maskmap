@@ -45,29 +45,32 @@
             <div class="mr-auto">
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" v-model="inlineRadioOptions"
+                id="check2km" value="2" @change="updateMarker">
+                <label class="form-check-label" for="check2km">2km</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" v-model="inlineRadioOptions"
                 id="check3km" value="3" @change="updateMarker">
                 <label class="form-check-label" for="check3km">3km</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" v-model="inlineRadioOptions"
-                id="check5km" value="5" @change="updateMarker">
-                <label class="form-check-label" for="check5km">5km</label>
-              </div>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" v-model="inlineRadioOptions"
-                id="checkAll" value="1000" checked @change="updateMarker">
+                id="checkAll" value="5000" checked @change="updateMarker">
                 <label class="form-check-label" for="checkAll">all</label>
               </div>
             </div>
           </div>
-          <p class="mb-0 small text-muted text-right">Search by district(green means available)</p>
+          <p class="mb-0 small text-muted text-right">
+            Please search by district and check filters<br>
+            (bg color presents mask quantity status)
+          </p>
         </div>
         <ul class="list-group">
           <template v-for="(item, key) in data">
             <a class="list-group-item text-left" :key="key"
               v-if="item.properties.county === select.city
                 && item.properties.town === select.area
-                && inlineRadioOptions === '1000'"
+                && inlineRadioOptions === '5000'"
               :class="{ 'highlight': item.properties.mask_adult || item.properties.mask_child}"
               @click="penTo(item)">
               <h3>{{ item.properties.name }}</h3>
@@ -75,10 +78,33 @@
                 Adult: {{ item.properties.mask_adult}}  |  Child: {{ item.properties.mask_child}}
               </p>
               <p class="mb-0">
-                 Distance：{{
+                 Distance: {{
                   getDistance(item.geometry.coordinates[0],
                   item.geometry.coordinates[1], 121.55, 25.03)}}
-                  Km
+                  km
+              </p>
+              <p class="mb-0">Address: <a :href="`https://www.google.com.tw/maps/place/${item.properties.address}`"
+                target="_blank" title="Google Map">
+                {{ item.properties.address }}</a>
+              </p>
+            </a>
+            <a class="list-group-item text-left" :key="key"
+              v-else-if="item.properties.county === select.city
+                && item.properties.town === select.area
+                && inlineRadioOptions === '2'
+                && getDistance(item.geometry.coordinates[0],
+                item.geometry.coordinates[1], 121.55, 25.03) < 2"
+              :class="{ 'highlight': item.properties.mask_adult || item.properties.mask_child}"
+              @click="penTo(item)">
+              <h3>{{ item.properties.name }}</h3>
+              <p class="mb-0">
+                Adult: {{ item.properties.mask_adult}}  |  Child: {{ item.properties.mask_child}}
+              </p>
+              <p class="mb-0">
+                 Distance: {{
+                  getDistance(item.geometry.coordinates[0],
+                  item.geometry.coordinates[1], 121.55, 25.03)}}
+                  km
               </p>
               <p class="mb-0">Address: <a :href="`https://www.google.com.tw/maps/place/${item.properties.address}`"
                 target="_blank" title="Google Map">
@@ -98,33 +124,10 @@
                 Adult: {{ item.properties.mask_adult}}  |  Child: {{ item.properties.mask_child}}
               </p>
               <p class="mb-0">
-                 Distance：{{
+                 Distance: {{
                   getDistance(item.geometry.coordinates[0],
                   item.geometry.coordinates[1], 121.55, 25.03)}}
-                  Km
-              </p>
-              <p class="mb-0">Address: <a :href="`https://www.google.com.tw/maps/place/${item.properties.address}`"
-                target="_blank" title="Google Map">
-                {{ item.properties.address }}</a>
-              </p>
-            </a>
-            <a class="list-group-item text-left" :key="key"
-              v-else-if="item.properties.county === select.city
-                && item.properties.town === select.area
-                && inlineRadioOptions === '5'
-                && getDistance(item.geometry.coordinates[0],
-                item.geometry.coordinates[1], 121.55, 25.03) < 5"
-              :class="{ 'highlight': item.properties.mask_adult || item.properties.mask_child}"
-              @click="penTo(item)">
-              <h3>{{ item.properties.name }}</h3>
-              <p class="mb-0">
-                Adult: {{ item.properties.mask_adult}}  |  Child: {{ item.properties.mask_child}}
-              </p>
-              <p class="mb-0">
-                 Distance：{{
-                  getDistance(item.geometry.coordinates[0],
-                  item.geometry.coordinates[1], 121.55, 25.03)}}
-                  Km
+                  km
               </p>
               <p class="mb-0">Address: <a :href="`https://www.google.com.tw/maps/place/${item.properties.address}`"
                 target="_blank" title="Google Map">
@@ -222,9 +225,9 @@ export default {
     osmMap: {},
     select: {
       city: '臺北市',
-      area: '大安區',
+      area: '信義區',
     },
-    inlineRadioOptions: '1000',
+    inlineRadioOptions: '2',
   }),
   methods: {
     rad(d) {
@@ -239,6 +242,7 @@ export default {
       + Math.cos(radLat1) * Math.cos(radLat2) * Math.sin(b / 2) * Math.sin(b / 2)));
       s *= 6378.137; //  地球半径
       s = Math.round(s * 10000) / 10000; // 输出为公里
+      s = s.toFixed(2);
       return s;
     },
     updateMarker() {
