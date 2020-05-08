@@ -68,7 +68,7 @@
           </p>
         </div>
         <ul class="list-group">
-          <template v-for="(item, key) in data">
+          <template v-for="(item, key) in data" v-bind:value="[userLat, userLng]">
             <a class="list-group-item text-left" :key="key"
               v-if="item.properties.county === select.city
                 && item.properties.town === select.area
@@ -82,7 +82,7 @@
               <p class="mb-0">
                  Distance: {{
                   getDistance(item.geometry.coordinates[0],
-                  item.geometry.coordinates[1], 121.55, 25.03)}}
+                  item.geometry.coordinates[1], userLng, userLat)}}
                   km
               </p>
               <p class="mb-0">Address: <a :href="`https://www.google.com.tw/maps/place/${item.properties.address}`"
@@ -95,7 +95,7 @@
                 && item.properties.town === select.area
                 && inlineRadioOptions === '2'
                 && getDistance(item.geometry.coordinates[0],
-                item.geometry.coordinates[1], 121.55, 25.03) < 2"
+                item.geometry.coordinates[1], userLng, userLat) < 2"
               :class="{ 'highlight': item.properties.mask_adult || item.properties.mask_child}"
               @click="penTo(item)">
               <h3>{{ item.properties.name }}</h3>
@@ -105,7 +105,7 @@
               <p class="mb-0">
                  Distance: {{
                   getDistance(item.geometry.coordinates[0],
-                  item.geometry.coordinates[1], 121.55, 25.03)}}
+                  item.geometry.coordinates[1], userLng, userLat)}}
                   km
               </p>
               <p class="mb-0">Address: <a :href="`https://www.google.com.tw/maps/place/${item.properties.address}`"
@@ -118,7 +118,7 @@
                 && item.properties.town === select.area
                 && inlineRadioOptions === '3'
                 && getDistance(item.geometry.coordinates[0],
-                item.geometry.coordinates[1], 121.55, 25.03) < 3"
+                item.geometry.coordinates[1], userLng, userLat) < 3"
               :class="{ 'highlight': item.properties.mask_adult || item.properties.mask_child}"
               @click="penTo(item)">
               <h3>{{ item.properties.name }}</h3>
@@ -128,7 +128,7 @@
               <p class="mb-0">
                  Distance: {{
                   getDistance(item.geometry.coordinates[0],
-                  item.geometry.coordinates[1], 121.55, 25.03)}}
+                  item.geometry.coordinates[1], userLng, userLat)}}
                   km
               </p>
               <p class="mb-0">Address: <a :href="`https://www.google.com.tw/maps/place/${item.properties.address}`"
@@ -152,6 +152,19 @@ import L from 'leaflet';
 import cityName from './assets/cityName.json';
 
 let osmMap = {};
+
+let userLocation = {};
+let userLat = {};
+let userLng = {};
+navigator.geolocation.getCurrentPosition((pos) => {
+  userLocation = pos.coords;
+});
+userLat = userLocation.latitude;
+userLng = userLocation.longitude;
+// for developing we change the user's location to Taipei 101's position
+userLat = 25.033671;
+userLng = 121.56442;
+
 const iconsConfig = {
   iconSize: [25, 41],
   iconAnchor: [12, 41],
@@ -182,6 +195,7 @@ const osm = {
     + Math.cos(radLat1) * Math.cos(radLat2) * Math.sin(b / 2) * Math.sin(b / 2)));
     s *= 6378.137; //  地球半径
     s = Math.round(s * 10000) / 10000; // 输出为公里
+    s = s.toFixed(2);
     return s;
   },
   addMapMarker(x, y, item) {
@@ -192,7 +206,7 @@ const osm = {
     Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
     Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
     Tele: ${item.phone}<br>
-    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    Distance：${this.getDistance(x, y, userLng, userLat)} km<br>
     <small>Last updated: ${item.updated}</small>`);
   },
   removeMapMarker() {
@@ -211,7 +225,7 @@ const osm = {
     Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
     Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
     Tele: ${item.phone}<br>
-    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    Distance：${this.getDistance(x, y, userLng, userLat)} km<br>
     Note: ${item.note}
     <br>
     <small>Last updated: ${item.updated}</small>`).openPopup();
@@ -230,7 +244,20 @@ export default {
     },
     inlineRadioOptions: '2',
     masksort: ['adultTrue', 'childTrue'],
+    userLocation: {},
+    userLat: {},
+    userLng: {},
   }),
+  created() {
+    navigator.geolocation.getCurrentPosition((pos) => {
+      this.userLocation = pos.coords;
+    });
+    this.userLat = this.userLocation.latitude;
+    this.userLng = this.userLocation.longitude;
+    // for developing we change the user's location to Taipei 101's position
+    this.userLat = 25.033671;
+    this.userLng = 121.56442;
+  },
   methods: {
     datasort(data) {
       if (this.masksort.length === 2) {
@@ -244,8 +271,9 @@ export default {
         return data.sort((a, b) => b.properties.mask_child - a.properties.mask_child);
       }
       return data.sort((a, b) => this.getDistance(a.geometry.coordinates[0],
-        a.geometry.coordinates[1], 121.55, 25.03)
-        - this.getDistance(b.geometry.coordinates[0], b.geometry.coordinates[1], 121.55, 25.03));
+        a.geometry.coordinates[1], userLng, userLat)
+        - this.getDistance(b.geometry.coordinates[0],
+          b.geometry.coordinates[1], userLng, userLat));
     },
     rad(d) {
       return d * (Math.PI / 180.0);
@@ -264,14 +292,17 @@ export default {
     },
     updateMarker() {
       this.removeMarker();
+      // add user location's marker
+      L.marker([userLat, userLng],
+        icons.userlc).addTo(osmMap).bindPopup('Hi! You are here');
       const pharmacies = this.data.filter((pharmacy) => {
         if (!this.select.area) {
           return pharmacy.properties.county === this.select.city
-          && this.getDistance(121.55, 25.03, pharmacy.geometry.coordinates[0],
+          && this.getDistance(userLng, userLat, pharmacy.geometry.coordinates[0],
             pharmacy.geometry.coordinates[1]) < this.inlineRadioOptions;
         }
         return pharmacy.properties.town === this.select.area
-          && this.getDistance(121.55, 25.03, pharmacy.geometry.coordinates[0],
+          && this.getDistance(userLng, userLat, pharmacy.geometry.coordinates[0],
             pharmacy.geometry.coordinates[1]) < this.inlineRadioOptions;
       });
       pharmacies.forEach((pharmacy) => {
@@ -301,7 +332,7 @@ export default {
   mounted() {
     // OSM
     osmMap = L.map('map', {
-      center: [25.03, 121.55],
+      center: [userLat, userLng],
       zoom: 15,
     });
 
@@ -318,7 +349,6 @@ export default {
       });
   },
 };
-
 </script>
 
 <style lang="scss">
