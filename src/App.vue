@@ -33,13 +33,15 @@
             <div class="ml-auto">
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox"
-                id="checkAdult" value="adultTrue" checked>
+                id="checkAdult" value="adultTrue"
+                checked v-model="masksort" @change="datasort(data)">
                 <label class="form-check-label" for="checkAdult">Adult</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox"
-                id="checkChild" value="childTrue" checked>
-                <label class="form-check-label" for="checkChild">Child</label>
+                id="checkChild" value="childTrue"
+                checked v-model="masksort" @change="datasort(data)">
+                <label class="form-check-label" for="checkChild" >Child</label>
               </div>
             </div>
             <div class="mr-auto">
@@ -150,7 +152,6 @@ import L from 'leaflet';
 import cityName from './assets/cityName.json';
 
 let osmMap = {};
-
 const iconsConfig = {
   iconSize: [25, 41],
   iconAnchor: [12, 41],
@@ -228,8 +229,24 @@ export default {
       area: '信義區',
     },
     inlineRadioOptions: '2',
+    masksort: ['adultTrue', 'childTrue'],
   }),
   methods: {
+    datasort(data) {
+      if (this.masksort.length === 2) {
+        return data.sort((a, b) => (b.properties.mask_adult + b.properties.mask_child)
+        - (a.properties.mask_adult + a.properties.mask_child));
+      }
+      if (this.masksort[0] === 'adultTrue') {
+        return data.sort((a, b) => b.properties.mask_adult - a.properties.mask_adult);
+      }
+      if (this.masksort[0] === 'childTrue') {
+        return data.sort((a, b) => b.properties.mask_child - a.properties.mask_child);
+      }
+      return data.sort((a, b) => this.getDistance(a.geometry.coordinates[0],
+        a.geometry.coordinates[1], 121.55, 25.03)
+        - this.getDistance(b.geometry.coordinates[0], b.geometry.coordinates[1], 121.55, 25.03));
+    },
     rad(d) {
       return d * (Math.PI / 180.0);
     },
@@ -292,14 +309,16 @@ export default {
       attribution: '<a target="_blank" href="https://www.openstreetmap.org/">© OpenStreetMap 貢獻者</a>',
       maxZoom: 18,
     }).addTo(osmMap);
-
     this.$http.get('https://raw.githubusercontent.com/kiang/pharmacies/master/json/points.json')
       .then((res) => {
         this.data = res.data.features;
+        this.data.sort((a, b) => (b.properties.mask_adult + b.properties.mask_child)
+        - (a.properties.mask_adult + a.properties.mask_child));
         this.updateMarker();
       });
   },
 };
+
 </script>
 
 <style lang="scss">
