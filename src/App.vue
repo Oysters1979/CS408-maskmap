@@ -180,6 +180,10 @@ const icons = {
     iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-grey.png',
     ...iconsConfig,
   }),
+  userlc: new L.Icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+    ...iconsConfig,
+  }),
 };
 
 const osm = {
@@ -205,8 +209,9 @@ const osm = {
     }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
     Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
     Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Distance: ${this.getDistance(x, y, userLng, userLat)} km<br>
     Tele: ${item.phone}<br>
-    Distance：${this.getDistance(x, y, userLng, userLat)} km<br>
+    Note: ${item.note}<br>
     <small>Last updated: ${item.updated}</small>`);
   },
   removeMapMarker() {
@@ -224,10 +229,9 @@ const osm = {
     }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong><br>
     Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
     Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Distance: ${this.getDistance(x, y, userLng, userLat)} km<br>
     Tele: ${item.phone}<br>
-    Distance：${this.getDistance(x, y, userLng, userLat)} km<br>
-    Note: ${item.note}
-    <br>
+    Note: ${item.note}<br>
     <small>Last updated: ${item.updated}</small>`).openPopup();
   },
 };
@@ -335,9 +339,8 @@ export default {
       center: [userLat, userLng],
       zoom: 15,
     });
-
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '<a target="_blank" href="https://www.openstreetmap.org/">© OpenStreetMap 貢獻者</a>',
+      attribution: '<a target="_blank" href="https://www.openstreetmap.org/">© OpenStreetMap Contributors</a>',
       maxZoom: 18,
     }).addTo(osmMap);
     this.$http.get('https://raw.githubusercontent.com/kiang/pharmacies/master/json/points.json')
