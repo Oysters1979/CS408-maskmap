@@ -85,8 +85,13 @@
             <a class="list-group-item text-left" :key="key"
               v-if="item.properties.county === select.city
                 && item.properties.town === select.area
-                && inlineRadioOptions === '500'"
-              :class="{ 'highlight': item.properties.mask_adult || item.properties.mask_child}"
+                && inlineRadioOptions === '500'
+                && (masksort[0] ==='adultTrue'
+                || masksort.length ===0 || masksort.length ===2)"
+              :class="{ 'grey':  item.properties.mask_adult < 1,
+              'red':  item.properties.mask_adult > 0 && item.properties.mask_adult < 1000,
+              'orange':  item.properties.mask_adult < 3000 && item.properties.mask_adult >= 1000,
+              'highlight': item.properties.mask_adult >= 3000}"
               @click="penTo(item)">
               <h3>{{ item.properties.name }}</h3>
               <p class="mb-0">
@@ -108,8 +113,13 @@
                 && item.properties.town === select.area
                 && inlineRadioOptions === '2'
                 && getDistance(item.geometry.coordinates[0],
-                item.geometry.coordinates[1], userLng, userLat) < 2"
-              :class="{ 'highlight': item.properties.mask_adult || item.properties.mask_child}"
+                item.geometry.coordinates[1], userLng, userLat) < 2
+                && (masksort[0] ==='adultTrue'
+                || masksort.length ===0 || masksort.length ===2)"
+              :class="{ 'grey':  item.properties.mask_adult < 1,
+              'red':  item.properties.mask_adult > 0 && item.properties.mask_adult < 1000,
+              'orange':  item.properties.mask_adult < 3000 && item.properties.mask_adult >= 1000,
+              'highlight': item.properties.mask_adult >= 3000}"
               @click="penTo(item)">
               <h3>{{ item.properties.name }}</h3>
               <p class="mb-0">
@@ -131,9 +141,93 @@
                 && item.properties.town === select.area
                 && inlineRadioOptions === '3'
                 && getDistance(item.geometry.coordinates[0],
-                item.geometry.coordinates[1], userLng, userLat) < 3"
-              :class="{ 'highlight': item.properties.mask_adult || item.properties.mask_child}"
+                item.geometry.coordinates[1], userLng, userLat) < 3
+                && (masksort[0] ==='adultTrue'
+                || masksort.length ===0 || masksort.length ===2)"
+              :class="{ 'grey':  item.properties.mask_adult < 1,
+              'red':  item.properties.mask_adult > 0 && item.properties.mask_adult < 1000,
+              'orange':  item.properties.mask_adult < 3000 && item.properties.mask_adult >= 1000,
+              'highlight': item.properties.mask_adult >= 3000}"
               @click="penTo(item)">
+              <h3>{{ item.properties.name }}</h3>
+              <p class="mb-0">
+                Adult: {{ item.properties.mask_adult}}  |  Child: {{ item.properties.mask_child}}
+              </p>
+              <p class="mb-0">
+                 Distance: {{
+                  getDistance(item.geometry.coordinates[0],
+                  item.geometry.coordinates[1], userLng, userLat)}}
+                  km
+              </p>
+              <p class="mb-0">Address: <a :href="`https://www.google.com.tw/maps/place/${item.properties.address}`"
+                target="_blank" title="Google Map">
+                {{ item.properties.address }}</a>
+              </p>
+            </a>
+            <a class="list-group-item text-left" :key="key"
+              v-if="item.properties.county === select.city
+                && item.properties.town === select.area
+                && inlineRadioOptions === '500'
+                && masksort[0] ==='childTrue' && masksort.length === 1"
+              :class="{ 'grey':  item.properties.mask_child < 1,
+              'red':  item.properties.mask_child > 0 && item.properties.mask_child < 1000,
+              'orange':  item.properties.mask_child < 3000 && item.properties.mask_child >= 1000,
+              'highlight': item.properties.mask_child >= 3000}"
+              @click="penTo1(item)">
+              <h3>{{ item.properties.name }}</h3>
+              <p class="mb-0">
+                Adult: {{ item.properties.mask_adult}}  |  Child: {{ item.properties.mask_child}}
+              </p>
+              <p class="mb-0">
+                 Distance: {{
+                  getDistance(item.geometry.coordinates[0],
+                  item.geometry.coordinates[1], userLng, userLat)}}
+                  km
+              </p>
+              <p class="mb-0">Address: <a :href="`https://www.google.com.tw/maps/place/${item.properties.address}`"
+                target="_blank" title="Google Map">
+                {{ item.properties.address }}</a>
+              </p>
+            </a>
+            <a class="list-group-item text-left" :key="key"
+              v-else-if="item.properties.county === select.city
+                && item.properties.town === select.area
+                && inlineRadioOptions === '2'
+                && getDistance(item.geometry.coordinates[0],
+                item.geometry.coordinates[1], userLng, userLat) < 2
+                && masksort[0] ==='childTrue' && masksort.length === 1"
+              :class="{ 'grey':  item.properties.mask_child < 1,
+              'red':  item.properties.mask_child > 0 && item.properties.mask_child < 1000,
+              'orange':  item.properties.mask_child < 3000 && item.properties.mask_child >= 1000,
+              'highlight': item.properties.mask_child >= 3000}"
+              @click="penTo1(item)">
+              <h3>{{ item.properties.name }}</h3>
+              <p class="mb-0">
+                Adult: {{ item.properties.mask_adult}}  |  Child: {{ item.properties.mask_child}}
+              </p>
+              <p class="mb-0">
+                 Distance: {{
+                  getDistance(item.geometry.coordinates[0],
+                  item.geometry.coordinates[1], userLng, userLat)}}
+                  km
+              </p>
+              <p class="mb-0">Address: <a :href="`https://www.google.com.tw/maps/place/${item.properties.address}`"
+                target="_blank" title="Google Map">
+                {{ item.properties.address }}</a>
+              </p>
+            </a>
+            <a class="list-group-item text-left" :key="key"
+              v-else-if="item.properties.county === select.city
+                && item.properties.town === select.area
+                && inlineRadioOptions === '3'
+                && getDistance(item.geometry.coordinates[0],
+                item.geometry.coordinates[1], userLng, userLat) < 3
+                && masksort[0] ==='childTrue' && masksort.length === 1"
+              :class="{ 'grey':  item.properties.mask_child < 1,
+              'red':  item.properties.mask_child > 0 && item.properties.mask_child < 1000,
+              'orange':  item.properties.mask_child < 3000 && item.properties.mask_child >= 1000,
+              'highlight': item.properties.mask_child >= 3000}"
+              @click="penTo1(item)">
               <h3>{{ item.properties.name }}</h3>
               <p class="mb-0">
                 Adult: {{ item.properties.mask_adult}}  |  Child: {{ item.properties.mask_child}}
@@ -189,6 +283,14 @@ const icons = {
     iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
     ...iconsConfig,
   }),
+  red: new L.Icon({
+    iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+    ...iconsConfig,
+  }),
+  orange: new L.Icon({
+    iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png',
+    ...iconsConfig,
+  }),
   grey: new L.Icon({
     iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-grey.png',
     ...iconsConfig,
@@ -216,16 +318,76 @@ const osm = {
     return s;
   },
   addMapMarker(x, y, item) {
-    const icon = item.mask_adult || item.mask_child ? icons.green : icons.grey;
-    L.marker([y, x], {
-      icon,
-    }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
+    // const icon = item.mask_adult || item.mask_child ? icons.green : icons.grey;
+    if (item.mask_adult === 0) {
+      const icon = icons.grey;
+      L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
     Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
     Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
-    Distance: ${this.getDistance(x, y, userLng, userLat)} km<br>
     Tele: ${item.phone}<br>
-    Note: ${item.note}<br>
+    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
     <small>Last updated: ${item.updated}</small>`);
+    } else if (item.mask_adult > 0 && item.mask_adult < 1000) {
+      const icon = icons.red;
+      L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
+    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Tele: ${item.phone}<br>
+    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    <small>Last updated: ${item.updated}</small>`);
+    } else if (item.mask_adult >= 1000 && item.mask_adult < 3000) {
+      const icon = icons.orange;
+      L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
+    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Tele: ${item.phone}<br>
+    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    <small>Last updated: ${item.updated}</small>`);
+    } else {
+      const icon = icons.green;
+      L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
+    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Tele: ${item.phone}<br>
+    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    <small>Last updated: ${item.updated}</small>`);
+    }
+  },
+  addMapMarker1(x, y, item) {
+    // const icon = item.mask_adult || item.mask_child ? icons.green : icons.grey;
+    if (item.mask_child === 0) {
+      const icon = icons.grey;
+      L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
+    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Tele: ${item.phone}<br>
+    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    <small>Last updated: ${item.updated}</small>`);
+    } else if (item.mask_child > 0 && item.mask_child < 1000) {
+      const icon = icons.red;
+      L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
+    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Tele: ${item.phone}<br>
+    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    <small>Last updated: ${item.updated}</small>`);
+    } else if (item.mask_child >= 1000 && item.mask_child < 3000) {
+      const icon = icons.orange;
+      L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
+    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Tele: ${item.phone}<br>
+    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    <small>Last updated: ${item.updated}</small>`);
+    } else {
+      const icon = icons.green;
+      L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
+    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Tele: ${item.phone}<br>
+    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    <small>Last updated: ${item.updated}</small>`);
+    }
   },
   removeMapMarker() {
     osmMap.eachLayer((layer) => {
@@ -235,17 +397,76 @@ const osm = {
     });
   },
   penTo(x, y, item) {
-    const icon = item.mask_adult || item.mask_child ? icons.green : icons.grey;
-    osmMap.panTo(new L.LatLng(y, x));
-    L.marker([y, x], {
-      icon,
-    }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong><br>
+    // const icon = item.mask_adult || item.mask_child ? icons.green : icons.grey;
+    if (item.mask_adult === 0) {
+      const icon = icons.grey;
+      L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
     Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
     Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
-    Distance: ${this.getDistance(x, y, userLng, userLat)} km<br>
     Tele: ${item.phone}<br>
-    Note: ${item.note}<br>
+    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
     <small>Last updated: ${item.updated}</small>`).openPopup();
+    } else if (item.mask_adult > 0 && item.mask_adult < 1000) {
+      const icon = icons.red;
+      L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
+    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Tele: ${item.phone}<br>
+    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    <small>Last updated: ${item.updated}</small>`).openPopup();
+    } else if (item.mask_adult >= 1000 && item.mask_adult < 3000) {
+      const icon = icons.orange;
+      L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
+    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Tele: ${item.phone}<br>
+    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    <small>Last updated: ${item.updated}</small>`).openPopup();
+    } else {
+      const icon = icons.green;
+      L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
+    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Tele: ${item.phone}<br>
+    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    <small>Last updated: ${item.updated}</small>`).openPopup();
+    }
+  },
+  penTo1(x, y, item) {
+    // const icon = item.mask_adult || item.mask_child ? icons.green : icons.grey;
+    if (item.mask_child === 0) {
+      const icon = icons.grey;
+      L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
+    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Tele: ${item.phone}<br>
+    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    <small>Last updated: ${item.updated}</small>`).openPopup();
+    } else if (item.mask_child > 0 && item.mask_child < 1000) {
+      const icon = icons.red;
+      L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
+    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Tele: ${item.phone}<br>
+    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    <small>Last updated: ${item.updated}</small>`).openPopup();
+    } else if (item.mask_child >= 1000 && item.mask_child < 3000) {
+      const icon = icons.orange;
+      L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
+    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Tele: ${item.phone}<br>
+    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    <small>Last updated: ${item.updated}</small>`).openPopup();
+    } else {
+      const icon = icons.green;
+      L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
+    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Tele: ${item.phone}<br>
+    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    <small>Last updated: ${item.updated}</small>`).openPopup();
+    }
   },
 };
 
@@ -278,15 +499,19 @@ export default {
   methods: {
     datasort(data) {
       if (this.masksort.length === 2) {
+        this.updateMarker();
         return data.sort((a, b) => (b.properties.mask_adult + b.properties.mask_child)
         - (a.properties.mask_adult + a.properties.mask_child));
       }
       if (this.masksort[0] === 'adultTrue') {
+        this.updateMarker();
         return data.sort((a, b) => b.properties.mask_adult - a.properties.mask_adult);
       }
       if (this.masksort[0] === 'childTrue') {
+        this.updateMarker();
         return data.sort((a, b) => b.properties.mask_child - a.properties.mask_child);
       }
+      this.updateMarker();
       return data.sort((a, b) => this.getDistance(a.geometry.coordinates[0],
         a.geometry.coordinates[1], userLng, userLat)
         - this.getDistance(b.geometry.coordinates[0],
@@ -312,17 +537,27 @@ export default {
       // add user location's marker
       L.marker([userLat, userLng],
         icons.userlc).addTo(osmMap).bindPopup('Hi! You are here');
-      const pharmacies = this.data.filter(pharmacy => pharmacy.properties.town === this.select.area
+      const pharmacies = this.data.filter(pharmacy => pharmacy.properties.town
+      === this.select.area
         && pharmacy.properties.county === this.select.city
         && this.getDistance(pharmacy.geometry.coordinates[0],
           pharmacy.geometry.coordinates[1], userLng, userLat) < Number(this.inlineRadioOptions));
       pharmacies.forEach((pharmacy) => {
         const { properties, geometry } = pharmacy;
-        osm.addMapMarker(
-          geometry.coordinates[0],
-          geometry.coordinates[1],
-          properties,
-        );
+        if (this.masksort.length === 0 || this.masksort[0] === 'adultTrue' || this.masksort.length === 2) {
+          osm.addMapMarker(
+            geometry.coordinates[0],
+            geometry.coordinates[1],
+            properties,
+          );
+        }
+        if (this.masksort.length === 1 && this.masksort[0] === 'childTrue') {
+          osm.addMapMarker1(
+            geometry.coordinates[0],
+            geometry.coordinates[1],
+            properties,
+          );
+        }
       });
     },
     removeMarker() {
@@ -331,6 +566,10 @@ export default {
     penTo(pharmacy) {
       const { properties, geometry } = pharmacy;
       osm.penTo(geometry.coordinates[0], geometry.coordinates[1], properties);
+    },
+    penTo1(pharmacy) {
+      const { properties, geometry } = pharmacy;
+      osm.penTo1(geometry.coordinates[0], geometry.coordinates[1], properties);
     },
     updateSelect() {
       this.removeMarker();
@@ -374,7 +613,19 @@ export default {
 }
 
 .highlight {
-  background: #e9ffe3;
+  background: rgba(92, 191, 64, 0.5); // #e9ffe3
+}
+
+.red {
+  background: rgba(255, 0, 0, 0.5); //
+}
+
+.orange {
+  background: rgba(255, 138, 55, 0.5);
+}
+
+.grey {
+  background: rgba(179, 179, 179, 0.5);
 }
 
 .toolbox {
