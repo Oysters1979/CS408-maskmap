@@ -32,9 +32,10 @@
           <div class="form-group d-flex">
             <label for="sortOptMenu" class="mr-2 col-form-label text-right">Sort list by</label>
             <div class="flex-fill">
-              <select id="sortOptMenu" class="form-control">
-                <option value="1" checked>mask quantity</option>
-                <option value="2">pharmacy distance</option>
+              <select id="sortOptMenu" class="form-control"
+                v-model="sortOpt" @change="datasort(data)">
+                <option value="1" checked >mask quantity</option>
+                <option value="2" >pharmacy distance</option>
               </select>
             </div>
           </div>
@@ -498,6 +499,7 @@ export default {
     },
     inlineRadioOptions: '2',
     masksort: ['adultTrue', 'childTrue'],
+    sortOpt: '1',
     userLocation: {},
     userLat: {},
     userLng: {},
@@ -514,24 +516,35 @@ export default {
   },
   methods: {
     datasort(data) {
-      if (this.masksort.length === 2) {
+      if (this.masksort.length === 2 && this.sortOpt === '1') {
         this.updateMarker();
         return data.sort((a, b) => (b.properties.mask_adult + b.properties.mask_child)
         - (a.properties.mask_adult + a.properties.mask_child));
       }
-      if (this.masksort[0] === 'adultTrue') {
+      if (this.masksort[0] === 'adultTrue' && this.sortOpt === '1' && this.masksort.length === 1) {
         this.updateMarker();
         return data.sort((a, b) => b.properties.mask_adult - a.properties.mask_adult);
       }
-      if (this.masksort[0] === 'childTrue') {
+      if (this.masksort[0] === 'childTrue' && this.sortOpt === '1' && this.masksort.length === 1) {
         this.updateMarker();
         return data.sort((a, b) => b.properties.mask_child - a.properties.mask_child);
       }
-      this.updateMarker();
-      return data.sort((a, b) => this.getDistance(a.geometry.coordinates[0],
-        a.geometry.coordinates[1], userLng, userLat)
+      if (this.masksort.length === 0 && this.sortOpt === '1') {
+        this.updateMarker();
+        return data.sort((a, b) => this.getDistance(a.geometry.coordinates[0],
+          a.geometry.coordinates[1], userLng, userLat)
         - this.getDistance(b.geometry.coordinates[0],
           b.geometry.coordinates[1], userLng, userLat));
+      }
+      if (this.sortOpt === '2') {
+        this.updateMarker();
+        return data.sort((a, b) => this.getDistance(a.geometry.coordinates[0],
+          a.geometry.coordinates[1], userLng, userLat)
+        - this.getDistance(b.geometry.coordinates[0],
+          b.geometry.coordinates[1], userLng, userLat));
+      }
+      this.updateMarker();
+      return data;
     },
     rad(d) {
       return d * (Math.PI / 180.0);
