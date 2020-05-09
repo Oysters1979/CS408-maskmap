@@ -322,34 +322,38 @@ const osm = {
     if (item.mask_adult === 0) {
       const icon = icons.grey;
       L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
-    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Mask left: <strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
     Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Distance: ${this.getDistance(x, y, userLng, userLat)} km<br>
     Tele: ${item.phone}<br>
-    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    Note: ${item.note}<br>
     <small>Last updated: ${item.updated}</small>`);
     } else if (item.mask_adult > 0 && item.mask_adult < 1000) {
       const icon = icons.red;
       L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
-    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Mask left: <strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
     Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Distance: ${this.getDistance(x, y, userLng, userLat)} km<br>
     Tele: ${item.phone}<br>
-    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    Note: ${item.note}<br>
     <small>Last updated: ${item.updated}</small>`);
     } else if (item.mask_adult >= 1000 && item.mask_adult < 3000) {
       const icon = icons.orange;
       L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
-    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Mask left: <strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
     Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Distance: ${this.getDistance(x, y, userLng, userLat)} km<br>
     Tele: ${item.phone}<br>
-    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    Note: ${item.note}<br>
     <small>Last updated: ${item.updated}</small>`);
     } else {
       const icon = icons.green;
       L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
-    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Mask left: <strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
     Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Distance: ${this.getDistance(x, y, userLng, userLat)} km<br>
     Tele: ${item.phone}<br>
-    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    Note: ${item.note}<br>
     <small>Last updated: ${item.updated}</small>`);
     }
   },
@@ -358,34 +362,38 @@ const osm = {
     if (item.mask_child === 0) {
       const icon = icons.grey;
       L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
-    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Mask left: <strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
     Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Distance: ${this.getDistance(x, y, userLng, userLat)} km<br>
     Tele: ${item.phone}<br>
-    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    Note: ${item.note}<br>
     <small>Last updated: ${item.updated}</small>`);
     } else if (item.mask_child > 0 && item.mask_child < 1000) {
       const icon = icons.red;
       L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
-    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Mask left: <strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
     Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Distance: ${this.getDistance(x, y, userLng, userLat)} km<br>
     Tele: ${item.phone}<br>
-    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    Note: ${item.note}<br>
     <small>Last updated: ${item.updated}</small>`);
     } else if (item.mask_child >= 1000 && item.mask_child < 3000) {
       const icon = icons.orange;
       L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
-    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Mask left: <strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
     Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Distance: ${this.getDistance(x, y, userLng, userLat)} km<br>
     Tele: ${item.phone}<br>
-    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    Note: ${item.note}<br>
     <small>Last updated: ${item.updated}</small>`);
     } else {
       const icon = icons.green;
       L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
-    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Mask left: <strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
     Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Distance: ${this.getDistance(x, y, userLng, userLat)} km<br>
     Tele: ${item.phone}<br>
-    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    Note: ${item.note}<br>
     <small>Last updated: ${item.updated}</small>`);
     }
   },
@@ -401,34 +409,38 @@ const osm = {
     if (item.mask_adult === 0) {
       const icon = icons.grey;
       L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
-    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Mask left: <strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
     Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Distance: ${this.getDistance(x, y, userLng, userLat)} km<br>
     Tele: ${item.phone}<br>
-    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    Note: ${item.note}<br>
     <small>Last updated: ${item.updated}</small>`).openPopup();
     } else if (item.mask_adult > 0 && item.mask_adult < 1000) {
       const icon = icons.red;
       L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
-    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Mask left: <strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
     Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Distance: ${this.getDistance(x, y, userLng, userLat)} km<br>
     Tele: ${item.phone}<br>
-    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    Note: ${item.note}<br>
     <small>Last updated: ${item.updated}</small>`).openPopup();
     } else if (item.mask_adult >= 1000 && item.mask_adult < 3000) {
       const icon = icons.orange;
       L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
-    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Mask left: <strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
     Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Distance: ${this.getDistance(x, y, userLng, userLat)} km<br>
     Tele: ${item.phone}<br>
-    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    Note: ${item.note}<br>
     <small>Last updated: ${item.updated}</small>`).openPopup();
     } else {
       const icon = icons.green;
       L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
-    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Mask left: <strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
     Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Distance: ${this.getDistance(x, y, userLng, userLat)} km<br>
     Tele: ${item.phone}<br>
-    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    Note: ${item.note}<br>
     <small>Last updated: ${item.updated}</small>`).openPopup();
     }
   },
@@ -437,34 +449,38 @@ const osm = {
     if (item.mask_child === 0) {
       const icon = icons.grey;
       L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
-    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Mask left: <strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
     Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Distance: ${this.getDistance(x, y, userLng, userLat)} km<br>
     Tele: ${item.phone}<br>
-    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    Note: ${item.note}<br>
     <small>Last updated: ${item.updated}</small>`).openPopup();
     } else if (item.mask_child > 0 && item.mask_child < 1000) {
       const icon = icons.red;
       L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
-    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Mask left: <strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
     Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Distance: ${this.getDistance(x, y, userLng, userLat)} km<br>
     Tele: ${item.phone}<br>
-    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    Note: ${item.note}<br>
     <small>Last updated: ${item.updated}</small>`).openPopup();
     } else if (item.mask_child >= 1000 && item.mask_child < 3000) {
       const icon = icons.orange;
       L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
-    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Mask left: <strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
     Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Distance: ${this.getDistance(x, y, userLng, userLat)} km<br>
     Tele: ${item.phone}<br>
-    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    Note: ${item.note}<br>
     <small>Last updated: ${item.updated}</small>`).openPopup();
     } else {
       const icon = icons.green;
       L.marker([y, x], { icon }).addTo(osmMap).bindPopup(`<strong>${item.name}</strong> <br>
-    Mask left：<strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
+    Mask left: <strong>Adult - ${item.mask_adult ? `${item.mask_adult}` : 'access error'}/ Child - ${item.mask_child ? `${item.mask_child}` : 'access error'}</strong><br>
     Address: <a href="https://www.google.com.tw/maps/place/${item.address}" target="_blank">${item.address}</a><br>
+    Distance: ${this.getDistance(x, y, userLng, userLat)} km<br>
     Tele: ${item.phone}<br>
-    Distance：${this.getDistance(x, y, 121.55, 25.03)}Km<br>
+    Note: ${item.note}<br>
     <small>Last updated: ${item.updated}</small>`).openPopup();
     }
   },
@@ -613,19 +629,19 @@ export default {
 }
 
 .highlight {
-  background: rgba(92, 191, 64, 0.5); // #e9ffe3
+  background: rgba(218, 245, 209, 0.5); // #e9ffe3
 }
 
 .red {
-  background: rgba(255, 0, 0, 0.5); //
+  background: rgba(245, 116, 116, 0.5); //
 }
 
 .orange {
-  background: rgba(255, 138, 55, 0.5);
+  background: rgba(243, 172, 122, 0.5);
 }
 
 .grey {
-  background: rgba(179, 179, 179, 0.5);
+  background: rgba(223, 219, 219, 0.5);
 }
 
 .toolbox {
