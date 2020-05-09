@@ -30,15 +30,6 @@
             </div>
           </div>
           <div class="form-group d-flex">
-            <label for="sortOptMenu" class="mr-2 col-form-label text-right">Sort list by</label>
-            <div class="flex-fill">
-              <select id="sortOptMenu" class="form-control">
-                <option value="1" checked>mask quantity</option>
-                <option value="2">pharmacy distance</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-group d-flex">
             <div class="ml-auto">
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox"
@@ -73,11 +64,7 @@
           </div>
           <p class="mb-0 small text-muted text-right">
             Please search by district and check filters<br>
-            (stock colors:
-            <i class="fas fa-square" style="font-size: 13px; color:lightgreen;"></i> &#62; 3k,
-            <i class="fas fa-square" style="font-size: 13px; color:orange;"></i> 1k ~ 3k,
-            <i class="fas fa-square" style="font-size: 13px; color:red;"></i> &#60; 1k,
-            <i class="fas fa-square" style="font-size: 13px; color:lightgray;"></i> 0/error)
+            (bg color presents mask quantity status)
           </p>
         </div>
         <ul class="list-group">
