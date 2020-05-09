@@ -57,7 +57,7 @@
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" v-model="inlineRadioOptions"
-                id="checkAll" value="5000" checked @change="updateMarker">
+                id="checkAll" value="500" @change="updateMarker">
                 <label class="form-check-label" for="checkAll">all</label>
               </div>
             </div>
@@ -72,7 +72,7 @@
             <a class="list-group-item text-left" :key="key"
               v-if="item.properties.county === select.city
                 && item.properties.town === select.area
-                && inlineRadioOptions === '5000'"
+                && inlineRadioOptions === '500'"
               :class="{ 'highlight': item.properties.mask_adult || item.properties.mask_child}"
               @click="penTo(item)">
               <h3>{{ item.properties.name }}</h3>
@@ -299,16 +299,10 @@ export default {
       // add user location's marker
       L.marker([userLat, userLng],
         icons.userlc).addTo(osmMap).bindPopup('Hi! You are here');
-      const pharmacies = this.data.filter((pharmacy) => {
-        if (!this.select.area) {
-          return pharmacy.properties.county === this.select.city
-          && this.getDistance(userLng, userLat, pharmacy.geometry.coordinates[0],
-            pharmacy.geometry.coordinates[1]) < this.inlineRadioOptions;
-        }
-        return pharmacy.properties.town === this.select.area
-          && this.getDistance(userLng, userLat, pharmacy.geometry.coordinates[0],
-            pharmacy.geometry.coordinates[1]) < this.inlineRadioOptions;
-      });
+      const pharmacies = this.data.filter(pharmacy => pharmacy.properties.town === this.select.area
+        && pharmacy.properties.county === this.select.city
+        && this.getDistance(pharmacy.geometry.coordinates[0],
+          pharmacy.geometry.coordinates[1], userLng, userLat) < Number(this.inlineRadioOptions));
       pharmacies.forEach((pharmacy) => {
         const { properties, geometry } = pharmacy;
         osm.addMapMarker(
@@ -328,9 +322,10 @@ export default {
     updateSelect() {
       this.removeMarker();
       this.updateMarker();
-      const pharmacy = this.data.find(item => item.properties.town === this.select.area);
-      const { geometry, properties } = pharmacy;
-      osm.penTo(geometry.coordinates[0], geometry.coordinates[1], properties);
+      const pharmacy = this.data.find(item => item.properties.town === this.select.area
+        && item.properties.county === this.select.city);
+      const { geometry } = pharmacy;
+      osmMap.panTo((new L.LatLng(geometry.coordinates[1], geometry.coordinates[0])), 15);
     },
   },
   mounted() {
