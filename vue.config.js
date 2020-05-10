@@ -1,3 +1,3 @@
 module.exports = {
-  publicPath: '/maskmap/'
+  publicPath: '/CS408-maskmap/'
 }
